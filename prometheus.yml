@@ -1,0 +1,15 @@
+scrape_configs:
+  - job_name: 'spring-application-cpu'
+    metrics_path: '/actuator/metrics/system.cpu.usage'
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+
+  - job_name: 'spring-application-memory'
+    metrics_path: '/actuator/metrics/jvm.memory.used'
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+
+  - job_name: 'spring-application-requests'
+    metrics_path: '/actuator/metrics/http.server.requests'
+    static_configs:
+      - targets: ['host.docker.internal:8080']

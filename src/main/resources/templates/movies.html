@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Список Фильмов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+        }
+        h1, table, div {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: calc(50% - 55px);
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .actions button {
+            background-color: #dc3545;
+        }
+        .actions button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<h1>Фильмы</h1>
+<div>
+    <form action="/movies/searchByTitle" method="get">
+        <input type="text" name="word" placeholder="Название фильма"/>
+        <button type="submit">Поиск по названию</button>
+    </form>
+    <form action="/movies/searchByGenre" method="get">
+        <input type="text" name="genre" placeholder="Жанр фильма"/>
+        <button type="submit">Поиск по жанру</button>
+    </form>
+    <form action="/movies/searchByActorSurname" method="get">
+        <input type="text" name="surname" placeholder="Фамилия актера"/>
+        <button type="submit">Поиск по фамилии актера</button>
+    </form>
+    <a href="/movies/show">Показать все фильмы</a> |
+    <a href="/movies/saveMovie">Добавить новый фильм</a> |
+    <a href="/movies/saveActor">Добавить нового актёра</a>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Год выпуска</th>
+            <th>Жанр</th>
+            <th>Рейтинг</th>
+            <th>Актеры</th>
+            <th>Действия</th>
+        </tr>
+        <tr th:each="movie : ${movies}">
+            <td th:text="${movie.title}">Название фильма</td>
+            <td th:text="${movie.description}">Описание</td>
+            <td th:text="${movie.release}">Год выпуска</td>
+            <td th:text="${movie.genre}">Жанр</td>
+            <td th:text="${movie.rating}">Рейтинг</td>
+            <td>
+                <ul>
+                    <li th:each="actor : ${movie.actors}" th:text="${actor.name} + ' ' + ${actor.surname} + ' (' + ${actor.role} + ')'">Имя Актера</li>
+                </ul>
+            </td>
+            <td class="actions">
+                <a th:href="@{/movies/updateMovieWithActors/{id}(id=${movie.id})}">Редактировать</a>
+                <button type="button" th:onclick="'deleteMovie(' + ${movie.id} + ');'">Удалить</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function deleteMovie(id) {
+        if (confirm("Вы уверены, что хотите удалить этот фильм?")) {
+            fetch('/movies/deleteMovie/' + id, {
+                method: 'GET'
+            }).then(response => {
+                if (response.ok) {
+                    alert("Фильм удален");
+                    window.location.reload();
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

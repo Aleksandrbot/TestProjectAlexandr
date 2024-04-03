@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: your_name
+      changes:
+        - createTable:
+            tableName: actor
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: surname
+                  type: varchar(255)
+              - column:
+                  name: role
+                  type: varchar(255)
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    foreignKey:
+                      name: fk_actor_movie
+                      references: movie(id)
+
+
+
+  - changeSet:
+      id: 2
+      author: your_name
+      changes:
+        - createTable:
+            tableName: movie
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: release
+                  type: integer
+              - column:
+                  name: rating
+                  type: float
+              - column:
+                  name: genre
+                  type: varchar(50)
+
+
